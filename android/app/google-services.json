@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "706742147918",
+    "project_id": "social-pet-app-13b4f",
+    "storage_bucket": "social-pet-app-13b4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706742147918:android:0d439890435748f753dc1f",
+        "android_client_info": {
+          "package_name": "com.example.pet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706742147918-c28tjo6b1lum9h619aepu2vkku37uubk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB94BfW7jO5HEdENaxk1xglNxa2vNCoa9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706742147918-c28tjo6b1lum9h619aepu2vkku37uubk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
