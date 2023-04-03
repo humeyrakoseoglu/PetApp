@@ -9,7 +9,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource{
   final FirebaseFirestore firebaseFirestore;
   final FirebaseAuth firebaseAuth;
 
-  FirebaseRemoteDataSourceImpl(this.firebaseFirestore, this.firebaseAuth);
+   FirebaseRemoteDataSourceImpl(this.firebaseFirestore, this.firebaseAuth);
 
   @override
   Future<void> createUser(UserEntity user) async {
