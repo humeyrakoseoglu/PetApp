@@ -1,0 +1,1 @@
+enum MediaSource { IMAGE, VIDEO, NONE }

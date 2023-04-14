@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 //Equatable that’s a package for value equality you can checkout it’s documentation
 class UserEntity extends Equatable{ // deger esitligi icin kullanilir hash code
@@ -15,11 +18,14 @@ class UserEntity extends Equatable{ // deger esitligi icin kullanilir hash code
   final num? totalPosts;
 
 
+
   //will not going to store in DB
+  final File? imageFile;
   final String? password;
   final String? otherUid;
 
   UserEntity({
+    this.imageFile,
     this.uid,
     this.username,
     this.name,
@@ -39,6 +45,7 @@ class UserEntity extends Equatable{ // deger esitligi icin kullanilir hash code
   @override
   // TODO: implement props
   List<Object?> get props => [
+    imageFile,
     uid,
     username,
     name,

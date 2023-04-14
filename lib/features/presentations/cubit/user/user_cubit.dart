@@ -11,7 +11,9 @@ part 'user_state.dart';
 class UserCubit extends Cubit<UserState> {
   final UpdateUserUseCase updateUserUseCase;
   final GetUsersUseCase getUsersUseCase;
-  UserCubit({required this.updateUserUseCase, required this.getUsersUseCase}) : super(UserInitial());
+
+  UserCubit({required this.updateUserUseCase, required this.getUsersUseCase})
+      : super(UserInitial());
 
   Future<void> getUsers({required UserEntity user}) async {
     emit(UserLoading());
@@ -20,7 +22,7 @@ class UserCubit extends Cubit<UserState> {
       streamResponse.listen((users) {
         emit(UserLoaded(users: users));
       });
-    } on SocketException catch(_) {
+    } on SocketException catch (_) {
       emit(UserFailure());
     } catch (_) {
       emit(UserFailure());
@@ -30,7 +32,7 @@ class UserCubit extends Cubit<UserState> {
   Future<void> updateUser({required UserEntity user}) async {
     try {
       await updateUserUseCase.call(user);
-    } on SocketException catch(_) {
+    } on SocketException catch (_) {
       emit(UserFailure());
     } catch (_) {
       emit(UserFailure());

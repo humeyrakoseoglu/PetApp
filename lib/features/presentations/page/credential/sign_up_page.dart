@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pet/const.dart';
 import 'package:pet/features/domain/entities/user/user_entity.dart';
 import 'package:pet/features/presentations/cubit/auth/auth_cubit.dart';
 import 'package:pet/features/presentations/cubit/credential/credential_cubit.dart';
 import 'package:pet/features/presentations/page/credential/sign_in_page.dart';
 import 'package:pet/features/presentations/page/main_screen/main_screen.dart';
+import 'package:pet/profile_widget.dart';
 
 import '../../widgets/button_container_widget.dart';
 import '../../widgets/form_container_widget.dart';
@@ -26,6 +29,8 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _bioController = TextEditingController();
 
   bool _isSigningUp = false;
+  bool _isUploading = false;
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -34,6 +39,24 @@ class _SignUpPageState extends State<SignUpPage> {
     _bioController.dispose();
     super.dispose();
   }
+
+  File? _image;
+
+  Future selectImage() async {
+    try{
+      final pickedFile = await ImagePicker.platform.getImage(source: ImageSource.gallery);
+      setState(() {
+        if(pickedFile != null) {
+          _image = File(pickedFile.path);
+        }else{
+          print("no image has been selected");
+        }
+      });
+    }catch(e){
+      toast("some error occured $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,16 +109,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 Container(
                   width: 60,
                   height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  child: Image.asset("assets/profile_default.png"),
+                    child: ClipRRect(borderRadius: BorderRadius.circular(30),child: profileWidget(image: _image))
+
                 ),
                 Positioned(
                   right: -10,
                   bottom: -15,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed:selectImage,
                     icon: Icon(Icons.add_a_photo, color: blueColor,),
                   ),
                 ),
@@ -132,7 +153,7 @@ class _SignUpPageState extends State<SignUpPage> {
             },
           ),
           sizeVer(10),
-          _isSigningUp == true ? Row(
+          _isSigningUp == true || _isUploading == true ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Please wait", style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w400),),
@@ -170,12 +191,13 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void _signUpUser() {
+  Future<void> _signUpUser() async {
     setState(() {
       _isSigningUp = true;
     });
     BlocProvider.of<CredentialCubit>(context).signUpUser(
-       UserEntity(email: _emailController.text,
+       UserEntity(
+       email: _emailController.text,
        password: _passwordController.text,
        bio: _bioController.text,
        username: _userNameController.text,
@@ -183,10 +205,10 @@ class _SignUpPageState extends State<SignUpPage> {
        totalFollowing: 0,
        followers: [],
        totalFollowers: 0,
-       profileUrl: "",
        website: "",
        following: [],
        name: "",
+       imageFile: _image,
       )
     ).then((value) => _clear());
   }

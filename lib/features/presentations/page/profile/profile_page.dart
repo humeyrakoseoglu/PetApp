@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pet/features/domain/entities/user/user_entity.dart';
 import 'package:pet/features/presentations/cubit/auth/auth_cubit.dart';
+import 'package:pet/profile_widget.dart';
 
 import '../../../../const.dart';
-import 'edit_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
   final UserEntity currentUser;
@@ -39,10 +39,8 @@ class ProfilePage extends StatelessWidget {
                     Container(
                       width: 80,
                       height: 80,
-                      decoration: BoxDecoration(
-                          color: secondaryColor,
-                          shape: BoxShape.circle
-                      ),
+                      child:ClipRRect(borderRadius:  BorderRadius.circular(40),
+                      child: profileWidget(imageUrl: currentUser.profileUrl),)
                     ),
                     Row(
                       children: [
@@ -124,7 +122,7 @@ class ProfilePage extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 10.0),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, PageConst.editProfilePage);
+                      Navigator.pushNamed(context, PageConst.editProfilePage, arguments: currentUser);
 
                     //  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
 
