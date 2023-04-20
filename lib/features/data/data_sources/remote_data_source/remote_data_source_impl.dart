@@ -13,7 +13,9 @@ import 'package:pet/features/domain/entities/posts/post_entity.dart';
 import 'package:pet/features/domain/entities/user/user_entity.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../domain/entities/replay/replay_entity.dart';
 import '../../models/comments/comment_model.dart';
+import '../../models/replay/replay_model.dart';
 
 
 class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
@@ -389,5 +391,86 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
 
     commentCollection.doc(comment.commentId).update(commentInfo);
   }
+
+  Future<void> createReplay(ReplayEntity replay) async {
+    final replayCollection = firebaseFirestore.collection(FirebaseConst.posts).doc(replay.postId).collection(FirebaseConst.comment).doc(replay.commentId).collection(FirebaseConst.replay);
+
+    final newReplay = ReplayModel(
+        userProfileUrl: replay.userProfileUrl,
+        username: replay.username,
+        replayId: replay.replayId,
+        commentId: replay.commentId,
+        postId: replay.postId,
+        likes: [],
+        description: replay.description,
+        creatorUid: replay.creatorUid,
+        createAt: replay.createAt
+    ).toJson();
+
+
+    try {
+
+      final replayDocRef = await replayCollection.doc(replay.replayId).get();
+
+      if (!replayDocRef.exists) {
+        replayCollection.doc(replay.replayId).set(newReplay);
+      } else {
+        replayCollection.doc(replay.replayId).update(newReplay);
+      }
+
+    } catch (e) {
+      print("some error occured $e");
+    }
+
+  }
+
+  Future<void> deleteReplay(ReplayEntity replay) async {
+    final replayCollection = firebaseFirestore.collection(FirebaseConst.posts).doc(replay.postId).collection(FirebaseConst.comment).doc(replay.commentId).collection(FirebaseConst.replay);
+
+    try {
+      replayCollection.doc(replay.replayId).delete();
+    } catch(e) {
+      print("some error occured $e");
+    }
+  }
+
+  Future<void> likeReplay(ReplayEntity replay) async {
+    final replayCollection = firebaseFirestore.collection(FirebaseConst.posts).doc(replay.postId).collection(FirebaseConst.comment).doc(replay.commentId).collection(FirebaseConst.replay);
+
+    final currentUid = await getCurrentUid();
+
+    final replayRef = await replayCollection.doc(replay.replayId).get();
+
+    if (replayRef.exists) {
+      List likes = replayRef.get("likes");
+      if (likes.contains(currentUid)) {
+        replayCollection.doc(replay.replayId).update({
+          "likes": FieldValue.arrayRemove([currentUid])
+        });
+      } else {
+        replayCollection.doc(replay.replayId).update({
+          "likes": FieldValue.arrayUnion([currentUid])
+        });
+      }
+    }
+  }
+
+  @override
+  Stream<List<ReplayEntity>> readReplays(ReplayEntity replay) {
+    final replayCollection = firebaseFirestore.collection(FirebaseConst.posts).doc(replay.postId).collection(FirebaseConst.comment).doc(replay.commentId).collection(FirebaseConst.replay);
+    return replayCollection.snapshots().map((querySnapshot) => querySnapshot.docs.map((e) => ReplayModel.fromSnapshot(e)).toList());
+  }
+
+  @override
+  Future<void> updateReplay(ReplayEntity replay) async {
+    final replayCollection = firebaseFirestore.collection(FirebaseConst.posts).doc(replay.postId).collection(FirebaseConst.comment).doc(replay.commentId).collection(FirebaseConst.replay);
+
+    Map<String, dynamic> replayInfo = Map();
+
+    if (replay.description != "" && replay.description != null) replayInfo['description'] = replay.description;
+
+    replayCollection.doc(replay.replayId).update(replayInfo);
+  }
+
 
 }

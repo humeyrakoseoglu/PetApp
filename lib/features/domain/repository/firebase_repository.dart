@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:pet/features/domain/entities/posts/post_entity.dart';
 
 import '../entities/comment/comment_entity.dart';
+import '../entities/replay/replay_entity.dart';
 import '../entities/user/user_entity.dart';
 
 abstract class FirebaseRepository {
@@ -38,4 +39,10 @@ abstract class FirebaseRepository {
   Future<void> deleteComment(CommentEntity comment);
   Future<void> likeComment(CommentEntity comment);
 
+  // Replay Features
+  Future<void> createReplay(ReplayEntity replay);
+  Stream<List<ReplayEntity>> readReplays(ReplayEntity replay);
+  Future<void> updateReplay(ReplayEntity replay);
+  Future<void> deleteReplay(ReplayEntity replay);
+  Future<void> likeReplay(ReplayEntity replay);
 }

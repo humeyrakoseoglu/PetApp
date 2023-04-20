@@ -6,6 +6,7 @@ import 'package:pet/features/domain/entities/user/user_entity.dart';
 import 'package:pet/features/domain/repository/firebase_repository.dart';
 
 import '../../domain/entities/comment/comment_entity.dart';
+import '../../domain/entities/replay/replay_entity.dart';
 import '../data_sources/remote_data_source/remote_data_source.dart';
 
 class FirebaseRepositoryImlp implements FirebaseRepository{
@@ -77,5 +78,20 @@ class FirebaseRepositoryImlp implements FirebaseRepository{
 
   @override
   Future<void> updateComment(CommentEntity comment) async => remoteDataSource.updateComment(comment);
+
+  @override
+  Future<void> createReplay(ReplayEntity replay) async => remoteDataSource.createReplay(replay);
+
+  @override
+  Future<void> deleteReplay(ReplayEntity replay) async => remoteDataSource.deleteReplay(replay);
+
+  @override
+  Future<void> likeReplay(ReplayEntity replay) async => remoteDataSource.likeReplay(replay);
+
+  @override
+  Stream<List<ReplayEntity>> readReplays(ReplayEntity replay) => remoteDataSource.readReplays(replay);
+
+  @override
+  Future<void> updateReplay(ReplayEntity replay) async => remoteDataSource.updateReplay(replay);
 
 }
