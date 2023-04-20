@@ -7,6 +7,7 @@ import 'package:pet/const.dart';
 import 'package:pet/injection_container.dart' as di;
 
 import '../../../../../profile_widget.dart';
+import '../../../../domain/entities/app_entity.dart';
 import '../../../../domain/entities/posts/post_entity.dart';
 import '../../../../domain/usecases/firebase_usecases/user/get_current_uid_usecase.dart';
 import '../../../cubit/post/post_cubit.dart';
@@ -121,7 +122,8 @@ class _SinglePostCardWidgetState extends State<SinglePostCardWidget> {
                   sizeHor(10),
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, PageConst.commentPage);
+                        Navigator.pushNamed(context, PageConst.commentPage, arguments: AppEntity(uid: _currentUid, postId: widget.post.postId));
+                        //Navigator.pushNamed(context, PageConst.commentPage);
                         //Navigator.push(context, MaterialPageRoute(builder: (context) => CommentPage()));
                       },
                       child: Icon(
@@ -162,10 +164,14 @@ class _SinglePostCardWidgetState extends State<SinglePostCardWidget> {
             ],
           ),
           sizeVer(10),
-          Text(
-            "View all ${widget.post.totalComments} comments",
-            style: TextStyle(color: darkGreyColor),
-          ),
+         // Text(
+         //   "View all ${widget.post.totalComments} comments",
+         //   style: TextStyle(color: darkGreyColor),
+         // ),
+          GestureDetector(onTap: () {
+            Navigator.pushNamed(context, PageConst.commentPage, arguments: AppEntity(uid: _currentUid, postId: widget.post.postId));
+
+          },child: Text("View all ${widget.post.totalComments} comments", style: TextStyle(color: darkGreyColor),)),
           sizeVer(10),
           Text(
             "${DateFormat("dd/MMM/yyy").format(widget.post.createAt!.toDate())}",

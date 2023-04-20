@@ -8,7 +8,10 @@ import 'package:pet/features/presentations/page/post/comment/comment_page.dart';
 import 'package:pet/features/presentations/page/post/update_post_page.dart';
 import 'package:pet/features/presentations/page/profile/edit_profile_page.dart';
 
+import 'features/domain/entities/app_entity.dart';
+import 'features/domain/entities/comment/comment_entity.dart';
 import 'features/domain/entities/posts/post_entity.dart';
+import 'features/presentations/page/post/comment/edit_comment_page.dart';
 
 class OnGenerateRoute {
   static Route<dynamic>? route(RouteSettings settings) {
@@ -32,7 +35,18 @@ class OnGenerateRoute {
         }
       }
       case PageConst.commentPage: {
-        return routeBuilder(CommentPage());
+        if (args is AppEntity) {
+          return routeBuilder(CommentPage(appEntity: args,));
+        }
+        return routeBuilder(NoPageFound());
+      }
+      case PageConst.updateCommentPage: {
+        if (args is CommentEntity) {
+          return routeBuilder(EditCommentPage(comment: args,));
+
+        } else {
+          return routeBuilder(NoPageFound());
+        }
       }
       case PageConst.signInPage: {
         return routeBuilder(SignInPage());

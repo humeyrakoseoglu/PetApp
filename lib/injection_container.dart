@@ -28,6 +28,15 @@ import 'package:pet/features/presentations/cubit/user/get_single_user/get_single
 import 'package:pet/features/presentations/cubit/user/user_cubit.dart';
 import 'package:pet/features/presentations/page/post/upload_post_page.dart';
 
+import 'features/domain/usecases/firebase_usecases/comment/create_comment_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/comment/delete_comment_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/comment/like_comment_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/comment/read_comment_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/comment/update_comment_usecase.dart';
+import 'features/domain/usecases/firebase_usecases/post/read_single_post_usecase.dart';
+import 'features/presentations/cubit/comment/comment_cubit.dart';
+import 'features/presentations/cubit/post/get_single_post/get_single_post_cubit.dart';
+
 final sl = GetIt.instance; // sl yani service locator
 
 Future<void> init() async {
@@ -74,6 +83,22 @@ Future<void> init() async {
           readPostUseCase: sl.call()),
   );
 
+  sl.registerFactory(
+        () => GetSinglePostCubit(
+        readSinglePostUseCase: sl.call()
+    ),
+  );
+
+  // Comment Cubit Injection
+  sl.registerFactory(
+        () => CommentCubit(
+      createCommentUseCase: sl.call(),
+      deleteCommentUseCase: sl.call(),
+      likeCommentUseCase: sl.call(),
+      readCommentUseCase: sl.call(),
+      updateCommentUseCase: sl.call(),
+    ),
+  );
 
   /*
   Factoryler talep edildiğinde bize her seferinde yeni instanse veriyor.
@@ -114,6 +139,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LikePostUseCase(repository: sl.call()));
   sl.registerLazySingleton(() => DeletePostUseCase(repository: sl.call()));
   sl.registerLazySingleton(() => UpdatePostUseCase(repository: sl.call()));
+  sl.registerLazySingleton(() => ReadSinglePostUseCase(repository: sl.call()));
+
+  // Comment
+  sl.registerLazySingleton(() => CreateCommentUseCase(repository: sl.call()));
+  sl.registerLazySingleton(() => ReadCommentUseCase(repository: sl.call()));
+  sl.registerLazySingleton(() => LikeCommentUseCase(repository: sl.call()));
+  sl.registerLazySingleton(() => UpdateCommentUseCase(repository: sl.call()));
+  sl.registerLazySingleton(() => DeleteCommentUseCase(repository: sl.call()));
 
 
   // Repository
