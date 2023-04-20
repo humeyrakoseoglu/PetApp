@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pet/const.dart';
 import 'package:pet/features/presentations/page/home/widgets/single_post_card_widget.dart';
 import 'package:pet/injection_container.dart' as di;
@@ -27,25 +26,31 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: BlocProvider<PostCubit> (
-        create: (context) => di.sl<PostCubit>()..getPosts(post: PostEntity()),
+      body: BlocProvider<PostCubit>(
+        create: (context) =>
+        di.sl<PostCubit>()
+          ..getPosts( post: PostEntity()),
         child: BlocBuilder<PostCubit, PostState>(
           builder: (context, postState) {
             if (postState is PostLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(),);
             }
             if (postState is PostFailure) {
               toast("Some Failure occured while creating the post");
             }
             if (postState is PostLoaded) {
-              return ListView.builder(
+              return postState.posts.isEmpty? _noPostsYetWidget() : ListView.builder(
                 itemCount: postState.posts.length,
-                  itemBuilder: (context, index) {
-                final post = postState.posts[index];
-                return SinglePostCardWidget(post: post);
-              });
+                itemBuilder: (context, index) {
+                  final post = postState.posts[index];
+                  return BlocProvider(
+                    create: (context) => di.sl<PostCubit>(),
+                    child: SinglePostCardWidget(post: post),
+                  );
+                },
+              );
             }
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(),);
           },
         ),
       ),

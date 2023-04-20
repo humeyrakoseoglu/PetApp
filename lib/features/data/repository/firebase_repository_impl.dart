@@ -5,6 +5,7 @@ import 'package:pet/features/domain/entities/posts/post_entity.dart';
 import 'package:pet/features/domain/entities/user/user_entity.dart';
 import 'package:pet/features/domain/repository/firebase_repository.dart';
 
+import '../../domain/entities/comment/comment_entity.dart';
 import '../data_sources/remote_data_source/remote_data_source.dart';
 
 class FirebaseRepositoryImlp implements FirebaseRepository{
@@ -51,7 +52,7 @@ class FirebaseRepositoryImlp implements FirebaseRepository{
   Future<void> deletePost(PostEntity post) async => remoteDataSource.deletePost(post);
 
   @override
-  Future<void> likePost(PostEntity post)  async => remoteDataSource.deletePost(post);
+  Future<void> likePost(PostEntity post)  async => remoteDataSource.likePost(post);
 
   @override
   Stream<List<PostEntity>> readPost(PostEntity post) => remoteDataSource.readPost(post);
@@ -59,5 +60,19 @@ class FirebaseRepositoryImlp implements FirebaseRepository{
   @override
   Future<void> updatePost(PostEntity post) async => remoteDataSource.updatePost(post);
 
+  @override
+  Future<void> createComment(CommentEntity comment) async => remoteDataSource.createComment(comment);
+
+  @override
+  Future<void> deleteComment(CommentEntity comment) async => remoteDataSource.deleteComment(comment);
+
+  @override
+  Future<void> likeComment(CommentEntity comment) async => remoteDataSource.likeComment(comment);
+
+  @override
+  Stream<List<CommentEntity>> readComments(String postId) => remoteDataSource.readComments(postId);
+
+  @override
+  Future<void> updateComment(CommentEntity comment) async => remoteDataSource.updateComment(comment);
 
 }

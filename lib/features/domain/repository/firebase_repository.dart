@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:pet/features/domain/entities/posts/post_entity.dart';
 
+import '../entities/comment/comment_entity.dart';
 import '../entities/user/user_entity.dart';
 
 abstract class FirebaseRepository {
@@ -29,5 +30,11 @@ abstract class FirebaseRepository {
   Future<void> deletePost(PostEntity post);
   Future<void> likePost(PostEntity post);
 
+  // Comment Features
+  Future<void> createComment(CommentEntity comment);
+  Stream<List<CommentEntity>> readComments(String postId);
+  Future<void> updateComment(CommentEntity comment);
+  Future<void> deleteComment(CommentEntity comment);
+  Future<void> likeComment(CommentEntity comment);
 
 }
